@@ -29,30 +29,30 @@ dependencies {
   testCompile 'junit:junit:4.12'
 }
 
-//apply from:"${project.rootDir}/lint.gradle"
+apply from:"${project.rootDir}/lint.gradle"
 
 
-apply plugin: "com.github.spotbugs"
-
-def lintReportDir = new File(project.buildDir, 'reports/lint')
-
-spotbugs {
-  toolVersion = '3.1.0-RC6'
-  reportsDir = lintReportDir
-  effort = "max"
-  reportLevel = "high"
-}
-
-task spotbugs(type: com.github.spotbugs.SpotBugsTask) {
-
-  pluginClasspath = project.configurations.spotbugsPlugins
-  classpath = files()
-  classes = fileTree("$project.buildDir/intermediates/classes/debug/")
-  source = fileTree('src/main/java')
-  ignoreFailures = true
-  reports {
-    xml.enabled true
-    xml.withMessages true
-  }
-  excludeFilter = file("$rootProject.projectDir/config/findbugs-android-exclude.xml")
-}
+//apply plugin: "com.github.spotbugs"
+//
+//def lintReportDir = new File(project.buildDir, 'reports/lint')
+//
+//spotbugs {
+//  toolVersion = '3.1.0-RC6'
+//  reportsDir = lintReportDir
+//  effort = "max"
+//  reportLevel = "high"
+//}
+//
+//task spotbugs(type: com.github.spotbugs.SpotBugsTask) {
+//
+//  pluginClasspath = project.configurations.spotbugsPlugins
+//  classpath = files()
+//  classes = fileTree("$project.buildDir/intermediates/classes/debug/")
+//  source = fileTree('src/main/java')
+//  ignoreFailures = true
+//  reports {
+//    xml.enabled true
+//    xml.withMessages true
+//  }
+//  excludeFilter = file("$rootProject.projectDir/config/findbugs-android-exclude.xml")
+//}
