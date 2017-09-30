@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion 26
+  buildToolsVersion "26.0.1"
+  defaultConfig {
+    applicationId "lin.tao.catchbug"
+    minSdkVersion 21
+    targetSdkVersion 26
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  compile 'com.android.support:appcompat-v7:26.+'
+  compile 'com.android.support.constraint:constraint-layout:1.0.2'
+  testCompile 'junit:junit:4.12'
+}
+
+//apply from:"${project.rootDir}/lint.gradle"
+
+
+apply plugin: "com.github.spotbugs"
+
+def lintReportDir = new File(project.buildDir, 'reports/lint')
+
+spotbugs {
+  toolVersion = '3.1.0-RC6'
+  reportsDir = lintReportDir
+  effort = "max"
+  reportLevel = "high"
+}
+
+task spotbugs(type: com.github.spotbugs.SpotBugsTask) {
+
+  pluginClasspath = project.configurations.spotbugsPlugins
+  classpath = files()
+  classes = fileTree("$project.buildDir/intermediates/classes/debug/")
+  source = fileTree('src/main/java')
+  ignoreFailures = true
+  reports {
+    xml.enabled true
+    xml.withMessages true
+  }
+  excludeFilter = file("$rootProject.projectDir/config/findbugs-android-exclude.xml")
+}

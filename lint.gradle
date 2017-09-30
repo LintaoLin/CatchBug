@@ -1,0 +1,34 @@
+apply plugin: "com.github.spotbugs"
+def lintReportDir = new File(project.buildDir, 'reports/lint')
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.github.spotbugs:gradlePlugin:1.4"
+  }
+}
+
+spotbugs {
+  toolVersion = '3.1.0-RC6'
+  reportsDir = lintReportDir
+  effort = "max"
+  reportLevel = "high"
+}
+
+task spotbugs(type: com.github.spotbugs.SpotBugsTask) {
+
+  pluginClasspath = project.configurations.spotbugsPlugins
+  classpath = files()
+  classes = fileTree("$project.buildDir/intermediates/classes/debug/")
+  source = fileTree('src/main/java')
+  ignoreFailures = true
+  reports {
+    xml.enabled true
+    xml.withMessages true
+  }
+  excludeFilter = file("$rootProject.projectDir/config/findbugs-android-exclude.xml")
+}
